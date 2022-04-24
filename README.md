@@ -338,13 +338,13 @@ I mainly used these Sources
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/alexwohltan/CSharpNeuralNetworkExample.svg?style=for-the-badge
 [contributors-url]: https://github.com/alexwohltan/CSharpNeuralNetworkExample/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
+[forks-shield]: https://img.shields.io/github/forks/alexwohltan/CSharpNeuralNetworkExample.svg?style=for-the-badge
 [forks-url]: https://github.com/alexwohltan/CSharpNeuralNetworkExample/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/alexwohltan/CSharpNeuralNetworkExample.svg?style=for-the-badge
 [stars-url]: https://github.com/alexwohltan/CSharpNeuralNetworkExample/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
+[issues-shield]: https://img.shields.io/github/issues/alexwohltan/CSharpNeuralNetworkExample.svg?style=for-the-badge
 [issues-url]: https://github.com/alexwohltan/CSharpNeuralNetworkExample/issues
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
+[license-shield]: https://img.shields.io/github/license/alexwohltan/CSharpNeuralNetworkExample.svg?style=for-the-badge
 [license-url]: https://github.com/alexwohltan/CSharpNeuralNetworkExample/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/alexanderwohltan/
