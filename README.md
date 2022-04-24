@@ -155,7 +155,150 @@ The interesting part is the Learning using Stochastic Gradient Descent. See 'Exp
 
 ## Explanation
 
-TODO
+Let's dive into the interesting part. The Learning with Stochastic Gradient Descent.
+
+We have different parameters we can use:
+- epochs -> How often we want to train the model. One epoch = training the model on the training set once
+- miniBatchSize -> We split the train set into smaller sets so it is easier to compute. 
+- learningRate -> each miniBatch-calculation gives us a direction in which we should move our weights and biases. The learning rate states how much we want to listen to this change. e.g. the algorithm says we should add +5 to weight0. with a learning rate of 0.1 we add 0.5 to weight0.
+- learningRateEnd -> The more we learn the smaller we want our learning rate to be. This would be the learning rate we want in the last epoch and the model gradually lowers the learning rate to this number.
+
+
+PSEUDO Code:
+
+For each epoch:
+
+1. Split Training Data into mini batches (small chunks of the overall training set)
+2. For each miniBatch containing trainSets
+   2.1 For each trainSet
+      2.1.1 Feed Forward -> For each layer compute the outputs
+      2.1.2 Compute the output error in the last layer
+      2.1.3 Backpropagate the Error -> Compute the Error for the other layers
+   2.2 Update the Weights and Biases
+
+
+
+### Split Training Data
+
+Using two Extension methods stolen from Stackoverflow ;)
+
+```cs
+    Rand.Shuffle(trainingData);
+    var miniBatches = trainingData.Split(miniBatchSize);
+```
+
+### Feed Forward
+
+```cs
+    // input into the network
+    double[] inputs = trainSet.Input;
+
+    // as is - output
+    double[] result = FeedForward(inputs);
+```
+
+### Compute the Gradient in the Output Layer
+
+We want to calculate by how much we need to change the output of each neuron in the last layer. Afterwards we will add all the changes in the miniBatch together and then apply the average to our weights and biases.
+
+Code in the NeuralNetwork Class
+```cs
+    // should be - output
+    double[] labels = trainSet.Label;
+    
+    OutputLayer.CalculateGradient(labels);
+```
+
+In the Neuron we are calculating the Derivative of the Cost Function.
+This looks a little bit complex in the code because of the delegates but in reality it is quite easy.
+Here is the 'raw' code for the QuadraticCost & the CrossEntropyCost Function. Note that we only use the Sigmoid Function as Activation Function here. Otherwise the CrossEntropyCostFunction would not work (in my code - a good mathematician surely can make it work)
+
+```cs
+// Quadratic Cost Function.
+// y -> label
+// Z -> w0 * a0 + ... + bias
+Gradient = (Output - y) * SigmoidActivation.FirstDerivative(Z);
+
+// Cross Entropy Cost Function.
+// y -> label
+Gradient = (Output - y); // see Michael Nielsen's ebook (link below) why we the Sigmoid Function cancelles out.
+```
+
+After that we add the Gradient to all the other Gradients in the miniBatch. This is done in the 'AddDeltas()' Function.
+
+```cs
+    DeltaBias += Gradient;
+    for (int i = 0; i < DeltaWeights.Length; i++)
+    {
+        DeltaWeights[i] += Inputs[i] * Gradient;
+    }
+```
+
+
+### Backpropagate the Gradient in the other Layers
+
+Now we want to calculate on how we need to change the other neurons. We will go from right to left (excluding the output layer)
+
+Iterate through all the other layers by starting at the second last layer
+
+```cs
+    for (int i = WorkingLayers.Length - 2; i >= 0; i--)
+    {
+        WorkingLayers[i].CalculateGradient(WorkingLayers[i + 1]); // we will need the gradients from the next layer so we give the next layer as argument.
+    }
+```
+The Gradient for each neuron is calculated by this formula:
+
+![Backpropagation Gradient][backpropagation-gradient]
+
+Here is the C# code:
+
+```cs
+    double gradient = 0;
+    for (int i = 0; i < followingLayer.Neurons.Length; i++)
+    {
+        gradient += followingLayer.Neurons[i].Weights[indexInLayer] * followingLayer.Neurons[i].Gradient;
+    }
+    Gradient = gradient * ActivationFunctionFirstDerivative(Z);
+```
+
+Note that we use the Derivative of the Activation Function here. If you use the Sigmoid Function it would look like this:
+
+```cs
+   Gradient = gradient * SigmoidActivation.FirstDerivative(Z)
+```
+
+Afterwards we add the gradient to the other gradients of the miniBatch again with 'AddDeltas()'
+
+### Update the Weights and Biases
+
+Now we just need to update the weights and the biases.
+
+Weights
+```cs
+    // Update Weights
+    for (int i = 0; i < Weights.Length; i++)
+    {
+        Weights[i] = Weights[i] - learningRate * (DeltaWeights[i] / miniBatchSize);
+    }
+
+    // Dont forget to reset the Gradients Sum
+    for (int i = 0; i < DeltaWeights.Length; i++)
+    {
+        DeltaWeights[i] = 0;
+    }
+```
+
+Bias
+```cs
+    // Update Bias
+    Bias = Bias - learningRate * (DeltaBias / miniBatchSize);
+
+    // Reset Delta
+    DeltaBias = 0;
+```
+
+And thats it. :)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -207,3 +350,4 @@ I mainly used these Sources
 [linkedin-url]: https://linkedin.com/in/othneildrew
 [concept-picture]: NeuralNetworkConcept.png
 [neuron-concept-picture]: NeuronConcept.png
+[backpropagation-gradient]: BackpropagationGradient.png
