@@ -77,7 +77,7 @@ I recommend going through 1 or 2 tutorials that explain the concept before divin
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+[![Concept Picture][concept-picture]](https://en.wikipedia.org/wiki/Feedforward_neural_network)
 
 There are many great README templates available on GitHub; however, I didn't find one that really suited my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I think this is it.
 
