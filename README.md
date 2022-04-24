@@ -1,28 +1,10 @@
-# CSharpNeuralNetworkExample
+# C# Neural Network Example
 
-I always wanted to develop my own implementation of a neural network to understand how they work and how they learn. There are many assets out there that explain the concept of neural networks and a ton of Python/R implementations. 
-As the math is quite complex I wanted to build a neural network from scratch and put it into an object oriented structure, to understand how it really works (without 3rd-Party-Libraries). Most of the python implementations use Numpy and as a C# developer it sometimes takes some googling on what those functions are doing.
-Therefore I built this example Neural Network in an object oriented structure. This code is not optimized for speed but rather for understanding the individual steps. 
 
-I recommend going through 1 or 2 tutorials that explain the concept before diving into the code. 
 
 <div id="top"></div>
-<!--
-*** Thanks for checking out the CSharpNeuralNetworkExample. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
--->
-
-
 
 <!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
@@ -56,14 +38,16 @@ I recommend going through 1 or 2 tutorials that explain the concept before divin
         <li><a href="#built-with">Built With</a></li>
       </ul>
     </li>
+    <li><a href="#getting-started">Getting Started</a></li>
     <li>
-      <a href="#getting-started">Getting Started</a>
+      <a href="#structure">Structure</a>
       <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
+        <li><a href="#neuralnetwork">Neural Network</a></li>
+        <li><a href="#layer">Layer</a></li>
+        <li><a href="#neuron">Neuron</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
+    <li><a href="#explanation">Explanation</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
@@ -74,21 +58,15 @@ I recommend going through 1 or 2 tutorials that explain the concept before divin
 
 
 
-<!-- ABOUT THE PROJECT -->
 ## About The Project
 
 [![Concept Picture][concept-picture]](https://en.wikipedia.org/wiki/Feedforward_neural_network)
 
-There are many great README templates available on GitHub; however, I didn't find one that really suited my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I think this is it.
+I always wanted to develop my own implementation of a neural network to understand how they work and how they learn. There are many assets out there that explain the concept of neural networks and a ton of Python/R implementations. 
+As the math is quite complex I wanted to build a neural network from scratch and put it into an object oriented structure, to understand how it really works (without 3rd-Party-Libraries). Most of the python implementations use Numpy and as a C# developer it sometimes takes some googling on what those functions are doing.
+Therefore I built this example Neural Network in an object oriented structure. This code is not optimized for speed but rather for understanding the individual steps. 
 
-Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should implement DRY principles to the rest of your life :smile:
-
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks to all the people have contributed to expanding this template!
-
-Use the `BLANK_README.md` to get started.
+I recommend going through 1 or 2 tutorials that explain the concept before diving into the code. 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -96,98 +74,88 @@ Use the `BLANK_README.md` to get started.
 
 ### Built With
 
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-
-* [Next.js](https://nextjs.org/)
-* [React.js](https://reactjs.org/)
-* [Vue.js](https://vuejs.org/)
-* [Angular](https://angular.io/)
-* [Svelte](https://svelte.dev/)
-* [Laravel](https://laravel.com)
-* [Bootstrap](https://getbootstrap.com)
-* [JQuery](https://jquery.com)
+This project is built solely with native C#/.Net Framework Code. No extra libraries needed.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
 
-<!-- GETTING STARTED -->
 ## Getting Started
 
 This is an example of how you may give instructions on setting up your project locally.
 To get a local copy up and running follow these simple example steps.
 
-### Prerequisites
+Using the network is quite easy. You need an array containing training data. The training data must inherit the TrainTestSet Class
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+```cs
+    public class TrainTestSet
+    {
+        public virtual double[] Input { get; set; }
+        public virtual double[] Label { get; set; }
+    }
+```
 
-### Installation
+Then initialize your network:
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
+```cs
+    NeuralNetwork stairsnetwork = new NeuralNetwork(
+        sizes: new int[] { 4, 10, 2 },
+        activations: new Activation[] { Activation.Sigmoid, Activation.Sigmoid },
+        costFunction: Cost.QuadraticCost,
+        rand: rand);
+```
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/your_username_/Project-Name.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
+'sizes' defines the shape of the network. In this example you would get a network with 4 input nodes, 1 hidden layer containing 10 neurons and 2 output neurons. Afterwards you specifiy the Activation Function and the Cost Function. If you do not want to think about them just always use Sigmoid and the QuadraticCost Function. (You can also specify a System.Random to use so you can debug easily. This can be left out.)
+
+## Structure
+
+The network basically consists of three classes:
+
+1. NeuralNetwork
+2. Layer
+3. Neuron
+
+### NeuralNetwork
+
+This is the object containing all the other objects. It has 2 arrays
+
+1. The Layers ('WorkingLayers') -> all the layers excluding the input layer.
+2. The Structure ('Sizes') -> Tells us the shape of the network. (see Getting Started)
+
+Otherwise it mainly just calls the 3 important methods:
+
+1. Feed Forward -> Using the Network. Gets an input and returns the calculated output.
+2. Stochastic Gradient Descent -> Training the network using the Stochastic Gradient Descent Algorithm
+3. Evaluate -> Evaluate the network with a test set.
+
+### Layer
+
+Layer does not contain very interesting stuff. It mainly just forwards the calls from the NeuralNetwork-Object to the Neurons.
+This class is mainly for understanding purposes. If you would optimize for speed, you would probably remove this class.
+
+### Neuron
+
+This is where the fun is happening. 
+
+![Concept Picture][neuron-concept-picture]
+
+If you watched at least 1 youtube video regarding neural networks you proably will understand this graphic. It's quite straightforward. In the code this is even implemented in the Properties.
+
+```cs
+public double ScratchSum { ... } // All the weights multiplied with the corresponding input -> w0 * a0 + w1 * a1 + w2 * a2
+public double Z { ... } // ScratchSum + Bias -> w0 * a0 + w1 * a1 + w2 * a2 + bias
+public double Output { ... } // ActivationFunction(Z) -> Most of the time Sigmoid is used but I also implemented HyperTan.
+```
+
+The interesting part is the Learning using Stochastic Gradient Descent. See 'Explanation' for this.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
 
-<!-- USAGE EXAMPLES -->
-## Usage
+## Explanation
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- ROADMAP -->
-## Roadmap
-
-- [x] Add Changelog
-- [x] Add back to top links
-- [ ] Add Additional Templates w/ Examples
-- [ ] Add "components" document to easily copy & paste sections of the readme
-- [ ] Multi-language Support
-    - [ ] Chinese
-    - [ ] Spanish
-
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- CONTRIBUTING -->
-## Contributing
-
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+TODO
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -205,9 +173,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
-
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+Alexander Wohltan - [@alexanderwohltan](https://www.linkedin.com/in/alexanderwohltan/) - alexander@wohltan.at
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -216,16 +182,10 @@ Project Link: [https://github.com/your_username/repo_name](https://github.com/yo
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
+I mainly used these Sources
 
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Malven's Flexbox Cheatsheet](https://flexbox.malven.co/)
-* [Malven's Grid Cheatsheet](https://grid.malven.co/)
-* [Img Shields](https://shields.io)
-* [GitHub Pages](https://pages.github.com)
-* [Font Awesome](https://fontawesome.com)
-* [React Icons](https://react-icons.github.io/react-icons/search)
+* [Michael Nielsen's Ebook](http://neuralnetworksanddeeplearning.com/chap1.html)
+* [James McCaffrey's Microsoft Blog Post](https://docs.microsoft.com/en-us/archive/msdn-magazine/2012/october/test-run-neural-network-back-propagation-for-programmers)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -246,3 +206,4 @@ Use this space to list resources you find helpful and would like to give credit 
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/othneildrew
 [concept-picture]: NeuralNetworkConcept.png
+[neuron-concept-picture]: NeuronConcept.png
