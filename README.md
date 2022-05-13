@@ -14,7 +14,6 @@
 
 
 
-<!-- PROJECT LOGO -->
 <br />
 <div align="center">
 
@@ -348,6 +347,6 @@ I mainly used these Sources
 [license-url]: https://github.com/alexwohltan/CSharpNeuralNetworkExample/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/alexanderwohltan/
-[concept-picture]: NeuralNetworkConcept.png
-[neuron-concept-picture]: NeuronConcept.png
-[backpropagation-gradient]: BackpropagationGradient.png
+[concept-picture]: images/NeuralNetworkConcept.png
+[neuron-concept-picture]: images/NeuronConcept.png
+[backpropagation-gradient]: images/BackpropagationGradient.png
